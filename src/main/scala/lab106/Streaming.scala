@@ -135,6 +135,14 @@ object Streaming {
    * @param sc
    */
   def exercise6(sc: SparkContext, host: String, port: Int): Unit = {
+    val ssc = new StreamingContext(sc, Seconds(5))
+    val lines = ssc.socketTextStream(host,port,StorageLevel.MEMORY_AND_DISK_SER).window(Seconds(60), Seconds(5))
+    val hashtags = lines.map(_.split('|')(2)).flatMap(_.split(", "))
+    val hashtagsCount = hashtags.map(x => (x, 1)).reduceByKey(_ + _).print()
+
+    ssc.start()
+    ssc.awaitTermination()
+
   }
 
   /**
@@ -143,6 +151,8 @@ object Streaming {
    * @param sc
    */
   def exercise7(sc: SparkContext, host: String, port: Int, path: String): Unit = {
+    exercise5(sc, host, port)
+    //Group by city
   }
 
   /**
@@ -151,6 +161,9 @@ object Streaming {
    * @param sc
    */
   def exercise8(sc: SparkContext, host: String, port: Int, path: String): Unit = {
+    exercise5(sc, host, port)
+    //Avg sentiment
+
   }
 
 }
