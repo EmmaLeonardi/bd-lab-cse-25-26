@@ -4,6 +4,7 @@ src/main/resources/aws_credentials.txt
 metastore_db/
 output/
 datasets/big/
+checkpoints/
 *.ppk
 aws/credentials
 aws/keys/*
